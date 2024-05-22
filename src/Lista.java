@@ -10,20 +10,6 @@ public class Lista {
     public void agregarempleados(Empleado aux){
         listaempleados.add(aux);
     }
-
-
-    public void mostrarEmpleados() {
-        if (listaempleados.isEmpty()) {
-            System.out.println("La lista de empleados está vacía.");
-        } else {
-            System.out.println("Lista de empleados:");
-            for (Empleado empleado : listaempleados) {
-                System.out.println("Cédula: " + empleado.getCedula());
-                System.out.println("Nombre: " + empleado.getNombre());
-
-            }
-        }
-    }
     public void actualizarempleados(){
             if (listaempleados.isEmpty()){
                 JOptionPane.showMessageDialog(null,"No hay elementos en la lista");
@@ -42,5 +28,45 @@ public class Lista {
     }
 
 
+    public Empleado busquedaPorCedula(long cedula) throws Exception {
+        if (listaempleados.isEmpty()) {
+            throw new Exception("No hay empleados");
+        }
+        if (cedula < listaempleados.get(0).getCedula() ||
+                cedula > listaempleados.get(listaempleados.size() - 1).getCedula()) {
+            throw new Exception("Esa cedula no existe");
+        }
+
+        int superior, inferior, centro;
+        inferior = 0;
+        superior = listaempleados.size() - 1;
+        while (inferior <= superior) {
+            centro = (inferior + superior) / 2;
+            Empleado em = listaempleados.get(centro);
+            if (em.getCedula() == cedula)
+                return em;
+            else if (em.getCedula() > cedula)
+                superior = centro - 1;
+            else
+                inferior = centro + 1;
+        }
+        throw new Exception("No existe esa cedula");
+    }
+
+    public boolean actualizarEmpleado(long cedula, String nNombre, float nSueldo, float naportealsegurosocial, float nimpuestoalarenta) {
+        try {
+            Empleado empleado = busquedaPorCedula(cedula);
+            if (empleado != null) {
+                empleado.setNombre(nNombre);
+                empleado.setSueldo(nSueldo);
+                empleado.setAportealsegurosocial(naportealsegurosocial);
+                empleado.setImpuestoalarenta(nimpuestoalarenta);
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
 
 }
