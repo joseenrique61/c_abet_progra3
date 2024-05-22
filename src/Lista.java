@@ -68,5 +68,42 @@ public class Lista {
         }
         return false;
     }
+    /*Busqueda por nombre*/
+    public ArrayList<Empleado> buscarNombre(String nombre){
+        ArrayList<Empleado> busqueda = new ArrayList();
+        for(Empleado p:listaempleados){
+            if(p.getNombre().contains(nombre)){
+                busqueda.add(p);
+
+            }
+        }return busqueda;
+    }
+    /*Imprimir lista*/
+    public String listaelementos(){
+        Empleado e;
+        String lista="";
+        for (int i=listaempleados.size()-1;i>=0;i--){
+            e=(Empleado) listaempleados.toArray()[i];
+            lista+=e.toString();
+        }
+        return lista;
+    }
+    /* Ordenar sueldos*/
+    public void actualizarSueldo(){
+        if (listaempleados.isEmpty()){
+            JOptionPane.showMessageDialog(null,"No hay elementos en la lista");
+
+        }
+        else {
+            int i= listaempleados.size()-2;
+            Empleado temporal=listaempleados.get(listaempleados.size()-1);
+            while (i>=0 && listaempleados.get(i).getSueldo()>temporal.getCedula())
+            {
+                listaempleados.set(i + 1, listaempleados.get(i));
+                i--;
+            }
+            listaempleados.set(i + 1, temporal);
+        }
+    }
 
 }
