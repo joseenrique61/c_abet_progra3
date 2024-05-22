@@ -1,4 +1,5 @@
-public class Empleado {
+public class Empleado implements Comparable<Empleado>
+{
     private String cedula;
     private String nombre;
     private float sueldo;
@@ -53,5 +54,10 @@ public class Empleado {
     @Override
     public String toString() {
         return "Empleado:\n" + "Cedula:" + cedula + "\nNombre:" + nombre  + "\nSueldo:" + sueldo + "\nAporte al segurosocial:" + aportealsegurosocial + "\nImpuesto a la renta:" + impuestoalarenta ;
+    }
+
+    @Override
+    public int compareTo(Empleado nuevo) {
+        return this.cedula.compareTo(nuevo.getCedula());
     }
 }
