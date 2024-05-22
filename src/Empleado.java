@@ -1,11 +1,13 @@
+import javax.swing.*;
+
 public class Empleado {
-    private String cedula;
+    private long cedula;
     private String nombre;
     private float sueldo;
     private float aportealsegurosocial;
     private float impuestoalarenta;
 
-    public Empleado(String cedula, String nombre, float sueldo, float aportealsegurosocial, float impuestoalarenta) {
+    public Empleado(long cedula, String nombre, float sueldo, float aportealsegurosocial, float impuestoalarenta) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.sueldo = sueldo;
@@ -13,7 +15,27 @@ public class Empleado {
         this.impuestoalarenta = impuestoalarenta;
     }
 
-    public String getCedula() {
+    public static float calculoaportealsegurosocial(float s){
+        return ((9.35f*s)/100f);
+    }
+    public static float calculoimpuestoalarenta(float su){
+        float sueldoanual=su*12;
+
+        if (sueldoanual<=5000){
+            return 0;
+        }
+        if (sueldoanual> 5000 && sueldoanual<=10000){
+            return ((10f*5000)/100f);
+        }
+        if (sueldoanual> 10000 && sueldoanual<=18000){
+            return ((20f*10000)/100f);
+        }
+        if((sueldoanual> 18000)){
+            return ((30f*18000)/100f);
+        }
+        return 0;
+    }
+    public long getCedula() {
         return cedula;
     }
 
