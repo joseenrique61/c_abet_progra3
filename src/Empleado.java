@@ -53,7 +53,7 @@ public class Empleado implements Comparable<Empleado>
 
     @Override
     public String toString() {
-        return "Empleado:\n" + "Cedula:" + cedula + "\nNombre :" + nombre  + "\nSueldo:" + sueldo + "\nAporte al segurosocial:" + aportealsegurosocial + "\nImpuesto a la renta :" + impuestoalarenta ;
+        return "Empleado:\n" + "Cedula :" + cedula + "\nNombre :" + nombre  + "\nSueldo:" + sueldo + "\nAporte al segurosocial:" + aportealsegurosocial + "\nImpuesto a la renta :" + impuestoalarenta ;
     }
 
     @Override
