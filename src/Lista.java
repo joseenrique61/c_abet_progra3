@@ -11,7 +11,7 @@ public class Lista {
     }
 
     public Empleado busquedaPorCedula (String cedula) throws Exception{
-        if (cedula<(Empleado)listaempleados.toArray()[0]).getCedul
+        if (cedula<(Empleado)listaempleados.toArray()[0]).getCedula
                 || (cedula > (Empleado)listaempleados.toArray()[listaempleados.size()-1]).getCedula))){
             throw new Exception("NO EXISTE NUMERO DE TRACK");
         }
