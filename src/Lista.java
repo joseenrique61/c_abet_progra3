@@ -16,7 +16,7 @@ public class Lista {
         }
         if (cedula.compareTo(listaempleados.get(0).getCedula()) < 0 ||
                 cedula.compareTo(listaempleados.get(listaempleados.size() - 1).getCedula()) > 0) {
-            throw new Exception("Esa cedula no existe ");
+            throw new Exception("Esa cedula no existe");
         }
 
         int superior, inferior, centro, comp;
