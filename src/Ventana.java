@@ -16,6 +16,7 @@ public class Ventana {
     private JButton btnBuscar;
     private JButton btnIngresar;
     private JTable tbEmpleados;
+    private JTextField txtActualizarCedula;
     private final Lista empleados = new Lista();
     DefaultTableModel dtm;
 
@@ -88,7 +89,7 @@ public class Ventana {
         });
 
         btnActualizar.addActionListener(e -> {
-            if (Objects.equals(txtBusqueda.getText(), "")) {
+            if (Objects.equals(txtActualizarCedula.getText(), "")) {
                 JOptionPane.showMessageDialog(null, "Debe ingresar una cédula o un nombre de empleado.");
                 return;
             }
@@ -99,10 +100,13 @@ public class Ventana {
             }
 
             try {
-                long cedula = Long.parseLong(txtBusqueda.getText());
+                long cedula = Long.parseLong(txtActualizarCedula.getText());
                 String nuevoNombre = txtModificarNombre.getText();
                 float sueldo = Objects.equals(txtModificarSueldo.getText(), "") ? -1 : Float.parseFloat(txtModificarSueldo.getText());
-                empleados.actualizarEmpleado(cedula,nuevoNombre,sueldo);
+                if (!empleados.actualizarEmpleado(cedula,nuevoNombre,sueldo)) {
+                    JOptionPane.showMessageDialog(null, "Cédula no encontrada.");
+                    return;
+                }
                 JOptionPane.showMessageDialog(null, "Empleado actualizado.");
                 btnBuscar.doClick();
                 actualizarTabla();

@@ -13,10 +13,10 @@ public class Lista {
         ordenarUltimoElemento();
     }
 
-    public void actualizarEmpleado(long cedula, String nombre, float sueldo) {
+    public boolean actualizarEmpleado(long cedula, String nombre, float sueldo) {
         Empleado empleado = busquedaPorCedula(cedula);
         if (empleado == null) {
-            return;
+            return false;
         }
 
         if (!Objects.equals(nombre, "")) {
@@ -26,6 +26,7 @@ public class Lista {
         if (sueldo != -1) {
             empleado.setSueldo(sueldo);
         }
+        return true;
     }
 
     public Empleado busquedaPorCedula(long cedula) {
