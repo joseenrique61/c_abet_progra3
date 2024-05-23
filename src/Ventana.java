@@ -16,7 +16,7 @@ public class Ventana {
     private JButton btnBuscar;
     private JButton btnIngresar;
     private JTable tbEmpleados;
-    Lista empleados = new Lista();
+    private final Lista empleados = new Lista();
     DefaultTableModel dtm;
 
     public void configurarTabla() {

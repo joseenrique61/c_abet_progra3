@@ -2,14 +2,14 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Lista {
-    private final ArrayList<Empleado> listaempleados;
+    private final ArrayList<Empleado> listaEmpleados;
 
     public Lista() {
-        listaempleados=new ArrayList<>();
+        listaEmpleados =new ArrayList<>();
     }
 
     public void agregarEmpleado(Empleado empleado){
-        listaempleados.add(empleado);
+        listaEmpleados.add(empleado);
         ordenarUltimoElemento();
     }
 
@@ -29,19 +29,19 @@ public class Lista {
     }
 
     public Empleado busquedaPorCedula(long cedula) {
-        if (listaempleados.isEmpty()) {
+        if (listaEmpleados.isEmpty()) {
             return null;
         }
-        if (cedula < listaempleados.getFirst().getCedula() || cedula > listaempleados.getLast().getCedula()) {
+        if (cedula < listaEmpleados.getFirst().getCedula() || cedula > listaEmpleados.getLast().getCedula()) {
             return null;
         }
 
         int superior, inferior, centro;
         inferior = 0;
-        superior = listaempleados.size() - 1;
+        superior = listaEmpleados.size() - 1;
         while (inferior <= superior) {
             centro = (inferior + superior) / 2;
-            Empleado empleado = listaempleados.get(centro);
+            Empleado empleado = listaEmpleados.get(centro);
             if (empleado.getCedula() == cedula) {
                 return empleado;
             }
@@ -57,7 +57,7 @@ public class Lista {
 
     public ArrayList<Empleado> buscarNombre(String nombre){
         ArrayList<Empleado> busqueda = new ArrayList<>();
-        for(Empleado p : listaempleados){
+        for(Empleado p : listaEmpleados){
             if(p.getNombre().contains(nombre)){
                 busqueda.add(p);
             }
@@ -66,7 +66,7 @@ public class Lista {
 
     public ArrayList<Empleado> ordenarPorSueldo() {
         ArrayList<Empleado> array = new ArrayList<>();
-        for (Object empleado : listaempleados.toArray()) {
+        for (Object empleado : listaEmpleados.toArray()) {
             array.add((Empleado) empleado);
         }
 
@@ -85,13 +85,13 @@ public class Lista {
     }
 
     public void ordenarUltimoElemento(){
-        int i= listaempleados.size()-2;
-        Empleado temporal=listaempleados.getLast();
-        while (i>=0 && listaempleados.get(i).getCedula()>temporal.getCedula())
+        int i= listaEmpleados.size()-2;
+        Empleado temporal= listaEmpleados.getLast();
+        while (i>=0 && listaEmpleados.get(i).getCedula()>temporal.getCedula())
         {
-            listaempleados.set(i + 1, listaempleados.get(i));
+            listaEmpleados.set(i + 1, listaEmpleados.get(i));
             i--;
         }
-        listaempleados.set(i + 1, temporal);
+        listaEmpleados.set(i + 1, temporal);
     }
 }
