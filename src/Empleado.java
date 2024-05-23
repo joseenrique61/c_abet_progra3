@@ -1,25 +1,19 @@
-import javax.swing.*;
-
 public class Empleado {
-    private long cedula;
+    private final long cedula;
     private String nombre;
     private float sueldo;
-    /*private float aportealsegurosocial;
-    private float impuestoalarenta;*/
+    private float aporteAlSeguroSocial;
+    private float impuestoALaRenta;
 
-    public Empleado(long cedula, String nombre, float sueldo/*, float aportealsegurosocial, float impuestoalarenta*/) {
+    public Empleado(long cedula, String nombre, float sueldo) {
         this.cedula = cedula;
         this.nombre = nombre;
-        this.sueldo = sueldo;
-        /*this.aportealsegurosocial = aportealsegurosocial;
-        this.impuestoalarenta = impuestoalarenta;*/
+        setSueldo(sueldo);
     }
-
 
     public long getCedula() {
         return cedula;
     }
-
 
     public String getNombre() {
         return nombre;
@@ -35,26 +29,41 @@ public class Empleado {
 
     public void setSueldo(float sueldo) {
         this.sueldo = sueldo;
+        setImpuestoALaRenta(sueldo);
+        setAporteAlSeguroSocial(sueldo);
     }
 
-    /*public float getAportealsegurosocial() {
-        return aportealsegurosocial;
+    public float getAporteAlSeguroSocial() {
+        return aporteAlSeguroSocial;
     }
 
-    public void setAportealsegurosocial(float aportealsegurosocial) {
-        this.aportealsegurosocial = aportealsegurosocial;
+    public float getImpuestoALaRenta() {
+        return impuestoALaRenta;
     }
 
-    public float getImpuestoalarenta() {
-        return impuestoalarenta;
+    private void setAporteAlSeguroSocial(float sueldo){
+        aporteAlSeguroSocial = ((9.35f*sueldo)/100f);
     }
 
-    public void setImpuestoalarenta(float impuestoalarenta) {
-        this.impuestoalarenta = impuestoalarenta;
-    }*/
+    private void setImpuestoALaRenta(float sueldo){
+        float sueldoanual=sueldo*12;
+
+        if (sueldoanual<=5000){
+            impuestoALaRenta = 0;
+        }
+        if (sueldoanual> 5000 && sueldoanual<=10000){
+            impuestoALaRenta = ((10f*5000)/100f);
+        }
+        if (sueldoanual> 10000 && sueldoanual<=18000){
+            impuestoALaRenta = ((20f*10000)/100f);
+        }
+        if((sueldoanual> 18000)){
+            impuestoALaRenta = ((30f*18000)/100f);
+        }
+    }
 
     @Override
     public String toString() {
-        return "EMPLEADO:\t\n" + "Cedula:" + cedula + "\nNombre:" + nombre  + "\nSueldo:" + sueldo + "\nAporte al segurosocial:\n" /*+ aportealsegurosocial + "\nImpuesto a la renta:" + impuestoalarenta */;
+        return "EMPLEADO:\t\n" + "Cedula: " + cedula + "\nNombre: " + nombre  + "\nSueldo: " + sueldo + "\nAporte al seguro social: " + aporteAlSeguroSocial + "\nImpuesto a la renta: " + impuestoALaRenta;
     }
 }

@@ -1,10 +1,9 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class Ventana {
-    private JTabbedPane tabbedPane1;
     private JPanel panel1;
     private JTextField txtCedula;
     private JTextField txtNombre;
@@ -16,68 +15,113 @@ public class Ventana {
     private JButton btnActualizar;
     private JButton btnBuscar;
     private JButton btnIngresar;
-    private JTextField txtBusquedaNombre;
-    private JButton btnOrdenar;
     private JTable tbEmpleados;
     Lista empleados = new Lista();
-    DefaultTableModel dtm = new DefaultTableModel();
+    DefaultTableModel dtm;
+
     public void configurarTabla() {
-        dtm.addColumn("CÈDULA");
+        dtm = new DefaultTableModel();
+        dtm.addColumn("CÉDULA");
         dtm.addColumn("NOMBRE");
         dtm.addColumn("SUELDO");
         dtm.addColumn("IMPUESTO A LA RENTA");
         dtm.addColumn("SEGURO SOCIAL");
+        dtm.addRow(new Object[] {"Cédula", "Nombre", "Sueldo", "Impuesto a la renta", "Seguro social"});
         tbEmpleados.setModel(dtm);
     }
-    public Ventana() {
-        btnIngresar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                long cedula = Long.parseLong(txtCedula.getText().toString());
-                String nombre = txtNombre.getText().toString();
-                float sueldo = Float.parseFloat(txtSueldo.getText().toString());
-                Empleado emple = new Empleado(cedula,nombre,sueldo);
-                float seguro= empleados.calculoaportealsegurosocial(sueldo);
-                float renta = empleados.calculoimpuestoalarenta(sueldo);
-                empleados.agregarempleados(emple);
-                JOptionPane.showMessageDialog(null, "EMPLEADO REGISTRADO");
-                Object[] fila = {cedula,nombre,sueldo, renta, seguro};
-                dtm.addRow(fila);
-            }
-        });
-        configurarTabla();
-        btnBuscar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String comprobacion= txtBusqueda.getText();
-                if(empleados.isLong(comprobacion)){
-                    try {
-                        long cedula = Long.parseLong(comprobacion);
-                        txtMonstrarEmpleado.setText(empleados.busquedaPorCedula(cedula).toString());
-                    } catch (Exception ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-                else{
-                    txtMonstrarEmpleado.setText(empleados.buscarNombre(comprobacion).toString());
-                }
-            }
-        });
-        btnActualizar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                long cedula = Long.parseLong(txtBusqueda.getText().toString());
-                String nuevoNombre = txtModificarNombre.getText();
-                float sueldo = Float.parseFloat(txtModificarSueldo.getText().toString());
-                empleados.actualizarEmpleado(cedula,nuevoNombre,sueldo);
-            }
-        });
-        btnOrdenar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
+    public Ventana() {
+        configurarTabla();
+
+        btnIngresar.addActionListener(e -> {
+            if (Objects.equals(txtCedula.getText(), "") || Objects.equals(txtNombre.getText(), "") || Objects.equals(txtSueldo.getText(), "")) {
+                JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
+                return;
+            }
+
+            try {
+                long cedula = Long.parseLong(txtCedula.getText());
+
+                if (empleados.busquedaPorCedula(cedula) != null) {
+                    JOptionPane.showMessageDialog(null, "El número de cédula ya existe.");
+                    return;
+                }
+
+                String nombre = txtNombre.getText();
+                float sueldo = Float.parseFloat(txtSueldo.getText());
+                Empleado empleado = new Empleado(cedula,nombre,sueldo);
+                empleados.agregarEmpleado(empleado);
+                JOptionPane.showMessageDialog(null, "EMPLEADO REGISTRADO");
+
+                actualizarTabla();
+
+                txtCedula.setText("");
+                txtSueldo.setText("");
+                txtNombre.setText("");
+            }
+            catch (NumberFormatException exception) {
+                JOptionPane.showMessageDialog(null, "La cédula o el sueldo son inválidos.");
             }
         });
+
+        btnBuscar.addActionListener(e -> {
+            if (Objects.equals(txtBusqueda.getText(), "")) {
+                JOptionPane.showMessageDialog(null, "La cédula ingresada no es válida.");
+            }
+
+            try {
+                long cedula = Long.parseLong(txtBusqueda.getText());
+                txtMonstrarEmpleado.setText(empleados.busquedaPorCedula(cedula).toString());
+            } catch (Exception ex) {
+                String lista = "";
+                ArrayList<Empleado> empleados1 = empleados.buscarNombre(txtBusqueda.getText());
+                if (empleados1.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No hay nombres que coincidan con la búsqueda.");
+                    return;
+                }
+
+                for (Empleado empleado : empleados1) {
+                    lista += empleado.toString() + "\n";
+                }
+                txtMonstrarEmpleado.setText(lista);
+            }
+        });
+
+        btnActualizar.addActionListener(e -> {
+            if (Objects.equals(txtBusqueda.getText(), "")) {
+                JOptionPane.showMessageDialog(null, "Debe ingresar una cédula o un nombre de empleado.");
+                return;
+            }
+
+            if (Objects.equals(txtModificarNombre.getText(), "") && Objects.equals(txtModificarSueldo.getText(), "")) {
+                JOptionPane.showMessageDialog(null, "Debe actualizarse por lo menos un atributo del empleado.");
+                return;
+            }
+
+            try {
+                long cedula = Long.parseLong(txtBusqueda.getText());
+                String nuevoNombre = txtModificarNombre.getText();
+                float sueldo = Objects.equals(txtModificarSueldo.getText(), "") ? -1 : Float.parseFloat(txtModificarSueldo.getText());
+                empleados.actualizarEmpleado(cedula,nuevoNombre,sueldo);
+                JOptionPane.showMessageDialog(null, "Empleado actualizado.");
+                btnBuscar.doClick();
+                actualizarTabla();
+            }
+            catch (NumberFormatException exception) {
+                JOptionPane.showMessageDialog(null, "La cédula o el sueldo no son válidos.");
+            }
+            catch (Exception exception) {
+                JOptionPane.showMessageDialog(null, "No existe el número de cédula.");
+            }
+        });
+    }
+
+    public void actualizarTabla() {
+        configurarTabla();
+
+        for (Empleado empleado : empleados.ordenarPorSueldo()) {
+            dtm.addRow(new Object[] {empleado.getCedula(), empleado.getNombre(), empleado.getSueldo(), empleado.getImpuestoALaRenta(), empleado.getAporteAlSeguroSocial()});
+        }
     }
 
     public static void main(String[] args) {
